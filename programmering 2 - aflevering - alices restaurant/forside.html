@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Alice´s Restaurant</title>
+  <meta name="description" content="Alice´s Restaurant findes i hjertet af Aarhus´smukke Latinerkvarter">
+  <meta name="author" content="Michella Carstens">
+  <meta name="keywords" content="Alices Restaurant, Restaurant, Café, Mad, drikke, Brunch, Frokost">
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="javascript/js.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+  <style>
+      /* google font: Berkshire */
+      @import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
+
+      body {
+          text-align: center;
+          font-family: sans serif;
+          background: var(--offwhite);
+          padding: 20px;
+      }
+
+      h1{
+        font-size: 25px;
+        color: white;
+        font-family: sans-serif;
+
+      }
+
+      h2{
+        font-size: 17px;
+        color: white;
+        font-family: sans-serif;
+      }
+
+      h3{
+        font-size: 24px;
+        color:var(--brown);
+        font-family: sans-serif;
+      }
+
+      h4{
+        font-size: 15px;
+        color: var(--brown);
+        font-family: sans-serif;
+      }
+
+      p{
+        font-size: 13px;
+        color: white;
+        font-family: sans-serif;
+      }
+
+      .weatherInfo {
+          border: 2px solid white ;
+          border-radius: 25px;
+          background-color: var(--brown);
+          margin-bottom: 50px;
+          width: 500px;
+
+      }
+  </style>
+</head>
+
+<body>
+
+  <!-- header -->
+  <header class="main-header">
+      <nav class="main-nav nav">
+          <ul>
+              <li><a href="forside.html">Forside</a></li>
+              <li><a href="index.html">Menukort</a></li>
+              <li><a href="#">Om Alice</a></li>
+          </ul>
+      </nav>
+      <h1 class="band-name band-name-large">Alices Restaurant</h1>
+  </header>
+
+
+  <!-- Vejroplysninger -->
+  <div id="result"></div>
+
+
+<!-- javascript skrives i Html for ikke at lave kludder i js filen :) -->
+<script>
+$(document).ready(function() {
+
+  fetch("http://api.openweathermap.org/data/2.5/weather?q=Aarhus&lang=da&units=metric&appid=79dae5576f9b00d2e57efecb7798550a").then(response => {
+      return response.json();
+  }).then(data => {
+
+      console.log(data);
+
+      console.log(data.weather[0].description)
+
+      // solnedgang
+      var sunsetMs = data.sys.sunset * 1000;
+      var sunset = new Date(sunsetMs);
+
+      var sunsetTime = sunset.getHours() + ":" + sunset.getMinutes();
+
+
+
+      result.innerHTML = `
+      <h3> vejret er nu: ${data.name} </h3>
+      <p> ${data.weather[0].description} </p>
+
+      <h4> Temperatur: ${data.main.temp} </h4>
+
+      <h4> Føles som: ${data.main.feels_like} </h4>
+       `
+
+
+      $('#result').append(
+
+
+          '<div class="weatherInfo">' +
+
+
+          '<h1> ' + data.name + ' </h1>' +
+
+
+          '<h2>Vejr: ' + data.weather[0].description + '</h2>' +
+
+
+          '<figure>' +
+          '<img src="img/' + data.weather[0].icon + '.png" alt="Vejrsymbol">' +
+          '</figure>' +
+
+
+          '<p> Solnedgang: ' + sunsetTime + '</p>' +
+
+          '</div>');
+
+
+  }).catch(err => {
+
+      console.log('There was an error ...');
+  });
+}); // document ready end
+
+</script>
+</body>
+</html>
